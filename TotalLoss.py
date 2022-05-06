@@ -20,7 +20,7 @@ def total_loss(self, X, y, m, b):
     return total_loss
 
 
-# Testing the total loss function
+'''# Testing the total loss function
 x = [1, 2, 3]
 y = [5, 1, 3]
 
@@ -36,7 +36,7 @@ total_loss1 = total_loss(x, y, m1, b1)
 total_loss2 = total_loss(x, y, m2, b2)
 
 print(total_loss1, total_loss2)
-
+'''
 
 #######################################################################################################################
 # This function will find the gradient of the total loss function with respect to b (we will assume that m is a constant)
@@ -87,6 +87,7 @@ def gradient_descent(x, y, m, b, learning_rate=0.01, iter=2000, diff=0.00001):
 def fit(self, x, y, learning_rate=0.01, iter=2000, diff=0.00001):
     self.m, self.b = gradient_descent(x, y, 0, 0, learning_rate, iter, diff)
 
+'''
 # Test the step gradient function
 x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
@@ -97,8 +98,7 @@ b=0
 m, b = step_gradient(x, y, m, b, 0.01)
 
 print(m, b)
-
-warnings.warn('Number of itrations exceeded without convergence being reached')
+'''
 
 
 
