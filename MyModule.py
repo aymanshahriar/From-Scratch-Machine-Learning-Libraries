@@ -5,8 +5,19 @@ class MyLinearRegression:
 
     # The __init__ method is used as the constructor method in python
     def __init__(self, m=0, b=0):
+        print("Reached here")
         self.m = m
         self.b = b
+
+    def total_loss(self, X, y):
+        loss_lst = []
+        for x_value, y_value in zip(X, y):
+            y_line = (self.m * x_value) + self.b
+            difference = y_value - y_line
+            loss = difference ** 2  # We square the difference so that points above and below the line affect the total loss in the same way
+            loss_lst.append(loss)
+        total_loss = sum(loss_lst)
+        return total_loss
 
     @staticmethod
     def total_loss(X, y, m, b):
@@ -49,3 +60,56 @@ class MyLinearRegression:
         new_b = b_current - (b_gradient * learning_rate)
 
         return new_m, new_b
+
+    def gradient_descent(self, x, y, m, b, learning_rate=0.01, iter=2000, diff=0.00001):
+        current_iter = 1
+        current_diff = diff
+        m, b = 0, 0
+        while (current_iter <= iter) and (current_diff > diff):
+            old_m = m
+            old_b = b
+            m, b = step_gradient(self, x, y, m, b, learning_rate)
+            current_iter += 1
+            diff_m = abs(old_m - m)
+            diff_b = abs(old_b - b)
+            current_diff = max(diff_m, diff_b)
+
+        # if number of iterations has been exceeded, throw a warning
+        if current_iter > iter:
+            warnings.warn('Number of itrations exceeded without convergence being reached')
+
+        return m, b
+
+    def fit(self, x, y, learning_rate=0.01, iter=2000, diff=0.00001):
+        self.m, self.b = gradient_descent(x, y, 0, 0, learning_rate, iter, diff)
+
+    '''# Testing the total loss function
+    x = [1, 2, 3]
+    y = [5, 1, 3]
+
+    # y = x
+    m1 = 1
+    b1 = 0
+
+    # y = 0.5x + 1
+    m2 = 0.5
+    b2 = 1
+
+    total_loss1 = total_loss(x, y, m1, b1)
+    total_loss2 = total_loss(x, y, m2, b2)
+
+    print(total_loss1, total_loss2)
+    '''
+
+    '''
+    # Test the step gradient function
+    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
+
+    m=0
+    b=0
+
+    m, b = step_gradient(x, y, m, b, 0.01)
+
+    print(m, b)
+    '''
