@@ -1,4 +1,17 @@
+# Implementing gradient descent based linear regression from scratch
+# (That optimizes the coefficients (m1, ..., mn) and slope (b) by minimizing the total loss function using gradient descent)
+
+# This class should have two attributes/variables: coef_ and intercept_
+# later I need to incorporate a .fit() method, which will just use gradient_descent
+# later look into best default alpha value, allow users to specify their own alpha value
+# later look into when to stop doing iteration of gradient descent
+
+# How many iterations of gradient descent should we perform?
+# Let us set a precision variable in our algorithm which calculates the difference between two consecutive “x” values .
+# If the difference between x values from 2 consecutive iterations is lesser than the precision we set, stop the algorithm !
+
 import warnings
+from sklearn.linear_model import LinearRegression
 
 
 class MyLinearRegression:
@@ -50,10 +63,12 @@ class MyLinearRegression:
         return m_gradient_slope_derivative
 
     # This function will find the gradients at b_current and m_current, and then return new b and m values that have been moved in that direction
+    # The step_gradient funcion will take the data (x and y values), the current value of m, b and alpha, and perform a single iteration of gradient descent
+    #    (for both m and b)
     def step_gradient(self, x, y, m_current, b_current, learning_rate):
         # Find the gradients at the current values of m and b
-        m_gradient = get_gradient_at_m(self, x, y, m_current, b_current)
-        b_gradient = get_gradient_at_b(self, x, y, m_current, b_current)
+        m_gradient = self.get_gradient_at_m(self, x, y, m_current, b_current)
+        b_gradient = self.get_gradient_at_b(self, x, y, m_current, b_current)
 
         # Update the m and b values, moving them in the opposite direction of the slope
         new_m = m_current - (m_gradient * learning_rate)
@@ -61,14 +76,16 @@ class MyLinearRegression:
 
         return new_m, new_b
 
+    # To know when to stop doing iterations of gradient descent, we have a precision value. We compare the values of m and b from the previous iteration. If their difference
+    #  is less than or equal to the percision value, it means that the values of m and b are berely changing anymore, which means that m and b have reached the bottom of the curve
+    #  (ie, m and b are values are optimized to give the minimum loss value)
     def gradient_descent(self, x, y, m, b, learning_rate=0.01, iter=2000, diff=0.00001):
         current_iter = 1
         current_diff = diff
-        m, b = 0, 0
         while (current_iter <= iter) and (current_diff > diff):
             old_m = m
             old_b = b
-            m, b = step_gradient(self, x, y, m, b, learning_rate)
+            m, b = self.step_gradient(self, x, y, m, b, learning_rate)
             current_iter += 1
             diff_m = abs(old_m - m)
             diff_b = abs(old_b - b)
@@ -81,35 +98,21 @@ class MyLinearRegression:
         return m, b
 
     def fit(self, x, y, learning_rate=0.01, iter=2000, diff=0.00001):
-        self.m, self.b = gradient_descent(x, y, 0, 0, learning_rate, iter, diff)
+        self.m, self.b = self.gradient_descent(x, y, 0, 0, learning_rate, iter, diff)
 
-    '''# Testing the total loss function
-    x = [1, 2, 3]
-    y = [5, 1, 3]
+    def predict(self, X):
+        # Assume x is a numpy arr
+        return [(self.m * x[0]) + self.b for x in X]
 
-    # y = x
-    m1 = 1
-    b1 = 0
+    def set_params(self, m=None, b=None):
+        if m is not None:
+            self.m = m
+        if b is not None:
+            self.b = b
 
-    # y = 0.5x + 1
-    m2 = 0.5
-    b2 = 1
-
-    total_loss1 = total_loss(x, y, m1, b1)
-    total_loss2 = total_loss(x, y, m2, b2)
-
-    print(total_loss1, total_loss2)
-    '''
-
-    '''
-    # Test the step gradient function
-    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
-
-    m=0
-    b=0
-
-    m, b = step_gradient(x, y, m, b, 0.01)
-
-    print(m, b)
-    '''
+    def compare_parameters_with_sklearn(self, x, y):
+        sklearn_model = LinearRegression()
+        sklearn_model.fit(x, y)
+        sklearn_m = sklearn_model.coef_[0]
+        sklearn_b = sklearn_model.intercept_
+        return {'MyLinearRegression model parameters:': [self.m, self.b], 'Sklearn model parameters:': [sklearn_m, sklearn_b]}

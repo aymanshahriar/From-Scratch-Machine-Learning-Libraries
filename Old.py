@@ -63,6 +63,3 @@ def gradient_descent(x, y, alpha):
     m, b = step_gradient_descent(x, y, m, b, alpha)
 
     return m, b
-
-
-

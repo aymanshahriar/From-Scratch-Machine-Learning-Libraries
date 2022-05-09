@@ -8,6 +8,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from Old import *
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -57,4 +58,35 @@ y = dataframe['rent']
 for featureName in X.columns:
     x = X[featureName].values
     test_model(x, y.values)
+'''
+
+'''# Testing the total loss function
+ x = [1, 2, 3]
+ y = [5, 1, 3]
+
+ # y = x
+ m1 = 1
+ b1 = 0
+
+ # y = 0.5x + 1
+ m2 = 0.5
+ b2 = 1
+
+ total_loss1 = total_loss(x, y, m1, b1)
+ total_loss2 = total_loss(x, y, m2, b2)
+
+ print(total_loss1, total_loss2)
+ '''
+
+'''
+# Test the step gradient function
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
+
+m=0
+b=0
+
+m, b = step_gradient(x, y, m, b, 0.01)
+
+print(m, b)
 '''
