@@ -33,7 +33,7 @@ def get_gradient_b(x, y, m, b):
 #  is less than or equal to the percision value, it means that the values of m and b are berely changing anymore, which means that m and b have reached the bottom of the curve
 #  (ie, m and b are values are optimized to give the minimum loss value)
 def step_gradient_descent(x, y, m, b, alpha, precision=0.000001):
-    precision = 0.000001
+
     diff_m = 1
     diff_b = 1
     iter = 0
@@ -56,10 +56,10 @@ def step_gradient_descent(x, y, m, b, alpha, precision=0.000001):
 
 # The gradient_descent function will take the datapoints (x, y), alpha, number of iterations and finds the "best" line
 # ie. the values of m and b that minimizes the total loss of the dataset
-def gradient_descent(x, y, alpha):
+def gradient_descent(x, y, alpha, precision):
     m = 0
     b = 0
 
-    m, b = step_gradient_descent(x, y, m, b, alpha)
+    m, b = step_gradient_descent(x, y, m, b, alpha, precision)
 
     return m, b

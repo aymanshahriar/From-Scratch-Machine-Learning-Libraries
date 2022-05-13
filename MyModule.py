@@ -18,7 +18,6 @@ class MyLinearRegression:
 
     # The __init__ method is used as the constructor method in python
     def __init__(self, m=0, b=0):
-        print("Reached here")
         self.m = m
         self.b = b
 
@@ -67,8 +66,8 @@ class MyLinearRegression:
     #    (for both m and b)
     def step_gradient(self, x, y, m_current, b_current, learning_rate):
         # Find the gradients at the current values of m and b
-        m_gradient = self.get_gradient_at_m(self, x, y, m_current, b_current)
-        b_gradient = self.get_gradient_at_b(self, x, y, m_current, b_current)
+        m_gradient = self.get_gradient_at_m(x, y, m_current, b_current)
+        b_gradient = self.get_gradient_at_b(x, y, m_current, b_current)
 
         # Update the m and b values, moving them in the opposite direction of the slope
         new_m = m_current - (m_gradient * learning_rate)
@@ -79,25 +78,24 @@ class MyLinearRegression:
     # To know when to stop doing iterations of gradient descent, we have a precision value. We compare the values of m and b from the previous iteration. If their difference
     #  is less than or equal to the percision value, it means that the values of m and b are berely changing anymore, which means that m and b have reached the bottom of the curve
     #  (ie, m and b are values are optimized to give the minimum loss value)
-    def gradient_descent(self, x, y, m, b, learning_rate=0.01, iter=2000, diff=0.00001):
+    def gradient_descent(self, x, y, m, b, learning_rate=0.01, iter=1000, diff=0.0000001):
         current_iter = 1
-        current_diff = diff
+        current_diff = diff+1
         while (current_iter <= iter) and (current_diff > diff):
             old_m = m
             old_b = b
-            m, b = self.step_gradient(self, x, y, m, b, learning_rate)
+            m, b = self.step_gradient(x, y, m, b, learning_rate)
             current_iter += 1
             diff_m = abs(old_m - m)
             diff_b = abs(old_b - b)
             current_diff = max(diff_m, diff_b)
-
         # if number of iterations has been exceeded, throw a warning
         if current_iter > iter:
             warnings.warn('Number of itrations exceeded without convergence being reached')
 
         return m, b
 
-    def fit(self, x, y, learning_rate=0.01, iter=2000, diff=0.00001):
+    def fit(self, x, y, learning_rate=0.01, iter=1000, diff=0.0000001):
         self.m, self.b = self.gradient_descent(x, y, 0, 0, learning_rate, iter, diff)
 
     def predict(self, X):
@@ -116,3 +114,19 @@ class MyLinearRegression:
         sklearn_m = sklearn_model.coef_[0]
         sklearn_b = sklearn_model.intercept_
         return {'MyLinearRegression model parameters:': [self.m, self.b], 'Sklearn model parameters:': [sklearn_m, sklearn_b]}
+
+
+'''# Test 1
+x = list(range(1, 11))  # checks out. Expected values are m=2, b=0
+y = [2 * i for i in x]
+
+model = MyLinearRegression()
+model.fit(x, y)
+print(model.m, model.b)'''
+
+
+
+
+
+
+
