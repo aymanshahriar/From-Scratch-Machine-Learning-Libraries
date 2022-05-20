@@ -13,41 +13,37 @@
 import warnings
 from sklearn.linear_model import LinearRegression
 
-
 class MyLinearRegression:
 
     # The __init__ method is used as the constructor method in python
-    def __init__(self, m=[], b=0):
-        self.m = m  ## m is now an array
+    def __init__(self, m=0, b=0):
+        self.m = m
         self.b = b
 
-    # X is now a 2d array, where each row contains the features of a single datapoint
     def total_loss(self, X, y):
         loss_lst = []
-        for datapoint, y_value in zip(X, y):  # datapoint is a list that contains the features of a single datapoint. Datapoint can also be called x
-            # Find the y-value predicted by the n-dimensional plane
-            y_plane = sum([m_i * x_i for m_i, x_i in zip(self.m, datapoint)]) + self.b
-            # Calculate the difference between the actual y-value and the y-value predicted by the n-dimensional plane
-            difference = y_value - y_plane
-            # We square the difference so that points above and below the plane affect the total loss in the same way
-            loss = difference ** 2
+        for x_value, y_value in zip(X, y):
+            y_line = (self.m * x_value) + self.b
+            difference = y_value - y_line
+            loss = difference ** 2  # We square the difference so that points above and below the line affect the total loss in the same way
             loss_lst.append(loss)
         total_loss = sum(loss_lst)
         return total_loss
 
     @staticmethod
-    # X is now a 2d array, where each row contains the features of a single datapoint
-    def total_loss(self, X, y, m, b):
+    def total_loss(X, y, m, b):
         loss_lst = []
-        for datapoint, y_value in zip(X, y):  # datapoint is a list that contains the features of a single datapoint. Datapoint can also be called x
-            # Find the y-value predicted by the n-dimensional plane
-            y_plane = sum([m_i * x_i for m_i, x_i in zip(m, datapoint)]) + b
-            # Calculate the difference between the actual y-value and the y-value predicted by the n-dimensional plane
-            difference = y_value - y_plane
-            # We square the difference so that points above and below the plane affect the total loss in the same way
-            loss = difference ** 2
+        for x_value, y_value in zip(X, y):
+            y_line = (m * x_value) + b
+            difference = y_value - y_line
+            loss = difference ** 2  # We square the difference so that points above and below the line affect the total loss in the same way
             loss_lst.append(loss)
         total_loss = sum(loss_lst)
+        return total_loss
+
+    @staticmethod
+    def total_loss_concise(X, y, m, b):
+        total_loss = sum([(y_value - ((m * x_value) + b)) ** 2 for x_value, y_value in zip(X, y)])
         return total_loss
 
     # This function will find the gradient of the total loss function with respect to b (we will assume that m is a constant)
@@ -57,15 +53,12 @@ class MyLinearRegression:
         b_gradient_slope_derivative = (-2 / N) * sum_of_differences
         return b_gradient_slope_derivative
 
-    # This function will find the gradient of the total loss function with respect to m_i (we will assume that b and (m_1,...m_n-m_i) are constants)
-    # i is the index of m where m_i is located
-    def get_gradient_at_m(self, X, y, m, i, b):
-        summation = sum([ x[i] * (y_point-[m_i*x_i for m_i, x_i in zip(m, x)]-b) for x, y_point in zip(X, y)])
-        N = len(y)
-        gradient_slope_derivative = (-2/N) * summation
-        return gradient_slope_derivative
-
-    #TODO: convert get_gradient_at_b
+    # This function will find the gradient of the total loss function with respect to m (we will assume that b is a constant)
+    def get_gradient_at_m(self, x, y, m, b):
+        sum_of_differences = sum([x_point * (y_point - (m * x_point + b)) for x_point, y_point in zip(x, y)])
+        N = len(x)
+        m_gradient_slope_derivative = (-2 / N) * sum_of_differences
+        return m_gradient_slope_derivative
 
     # This function will find the gradients at b_current and m_current, and then return new b and m values that have been moved in that direction
     # The step_gradient funcion will take the data (x and y values), the current value of m, b and alpha, and perform a single iteration of gradient descent
@@ -86,7 +79,7 @@ class MyLinearRegression:
     #  (ie, m and b are values are optimized to give the minimum loss value)
     def gradient_descent(self, x, y, m, b, learning_rate=0.01, iter=1000, diff=0.0000001):
         current_iter = 1
-        current_diff = diff + 1
+        current_diff = diff+1
         while (current_iter <= iter) and (current_diff > diff):
             old_m = m
             old_b = b
@@ -119,8 +112,7 @@ class MyLinearRegression:
         sklearn_model.fit(x, y)
         sklearn_m = sklearn_model.coef_[0]
         sklearn_b = sklearn_model.intercept_
-        return {'MyLinearRegression model parameters:': [self.m, self.b],
-                'Sklearn model parameters:': [sklearn_m, sklearn_b]}
+        return {'MyLinearRegression model parameters:': [self.m, self.b], 'Sklearn model parameters:': [sklearn_m, sklearn_b]}
 
 
 '''# Test 1
@@ -130,3 +122,10 @@ y = [2 * i for i in x]
 model = MyLinearRegression()
 model.fit(x, y)
 print(model.m, model.b)'''
+
+
+
+
+
+
+

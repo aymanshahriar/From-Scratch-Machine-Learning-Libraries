@@ -21,7 +21,7 @@ def test_model(x, y, alpha, diff):
 
     # Get m and b of new model
     model = MyLinearRegression()
-    model.fit(x, y, learning_rate=alpha, diff=diff, iter=10000)
+    model.fit(x, y, learning_rate=alpha, diff=diff, iter=100)
     new_m = model.m
     new_b = model.b
 
@@ -32,9 +32,27 @@ def test_model(x, y, alpha, diff):
     '''print('scikit m:', sklearn_m, '   old m:', old_m)
     print('scikit b:', sklearn_b, '   old b:', old_b)'''
 
-alpha = 0.0001
-diff = 0.000001
+alpha = 0.01
+diff = 0.0000001
 # num_iter = 1000
+
+#x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+x = list(range(1, 11))
+x = np.reshape(x, (-1, 1))
+#y = np.array([52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184])
+y = [2 * i for i in x]
+model = MyLinearRegression()
+model.fit(x, y, learning_rate=alpha, diff=diff, iter=20000)   ################# Testing is complete! (Including for predict) Both single linear regression and multiple linear regression works
+print(model.m, model.b)
+print(model.predict(x))
+model = LinearRegression()
+model.fit(np.reshape(x, (-1, 1)), y)
+sklearn_m = model.coef_[0]
+sklearn_b = model.intercept_
+
+print("sklearn:", sklearn_m, sklearn_b)
+
+
 
 '''
 # Test 1
@@ -42,7 +60,8 @@ x = list(range(1, 11))  # checks out. Expected values are m=2, b=0
 y = [2 * i for i in x]
 test_model(x, y, alpha, diff)
 
-# Test 2
+
+# Test 2  # checks out. Expected values are m = 10.388111888111885, b = 50.22727272727275
 x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
 test_model(x, y, alpha, diff)
@@ -97,4 +116,18 @@ model = MyLinearRegression()
 m, b = model.step_gradient(x, y, m, b, 0.01)
 
 print(m, b)
+'''
+
+'''# Got this test from: https://medium.com/analytics-vidhya/implementing-gradient-descent-for-multi-linear-regression-from-scratch-3e31c114ae12
+from sklearn.datasets import load_boston
+boston = load_boston()
+X = boston.data
+Y = boston.target
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+X_transform=sc.fit_transform(X)
+model = MyLinearRegression()
+model.fit(X_transform, Y)
+print("m (coefficients):\n", model.m)
+print("b (intercept/bias):\n", model.b)
 '''
