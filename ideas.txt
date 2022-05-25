@@ -1,3 +1,0 @@
-Implement a Minimizing Loss program similar to codecademy
-
-How to distrivute the methods:

@@ -1,19 +1,23 @@
+"""
+This module contains various test cases that test the MyLinearRegression class,
+which is inside the MyLinearModel module
+"""
+
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+
 import Old
-from MyModule import MyLinearRegression
+from MyLinearModel import MyLinearRegression
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('expand_frame_repr', False)
 
-
 def test_model(x, y, alpha, diff):
     # Get m and b of sklearn model
     model = LinearRegression()
-    model.fit(np.reshape(x, (-1, 1)), y)
-    sklearn_m = model.coef_[0]
+    sklearn_m = model.coef_
     sklearn_b = model.intercept_
 
     # Get m and b of old model
@@ -29,39 +33,16 @@ def test_model(x, y, alpha, diff):
     print('sklearn b:', sklearn_b, '   old b:', old_b, '    new b:', new_b)
     print()
 
-    '''print('scikit m:', sklearn_m, '   old m:', old_m)
-    print('scikit b:', sklearn_b, '   old b:', old_b)'''
-
 alpha = 0.01
 diff = 0.0000001
-# num_iter = 1000
+num_iter = 1000
 
-#x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+# Test 1   Expected values are m=2, b=0
 x = list(range(1, 11))
-x = np.reshape(x, (-1, 1))
-#y = np.array([52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184])
-y = [2 * i for i in x]
-model = MyLinearRegression()
-model.fit(x, y, learning_rate=alpha, diff=diff, iter=20000)   ################# Testing is complete! (Including for predict) Both single linear regression and multiple linear regression works
-print(model.m, model.b)
-print(model.predict(x))
-model = LinearRegression()
-model.fit(np.reshape(x, (-1, 1)), y)
-sklearn_m = model.coef_[0]
-sklearn_b = model.intercept_
-
-print("sklearn:", sklearn_m, sklearn_b)
-
-
-
-'''
-# Test 1
-x = list(range(1, 11))  # checks out. Expected values are m=2, b=0
 y = [2 * i for i in x]
 test_model(x, y, alpha, diff)
 
-
-# Test 2  # checks out. Expected values are m = 10.388111888111885, b = 50.22727272727275
+# Test 2  Expected values are m = 10.388111888111885, b = 50.22727272727275
 x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
 test_model(x, y, alpha, diff)
@@ -71,7 +52,6 @@ dataframe = pd.read_csv('heights.csv')
 x = dataframe['height'].values
 y = dataframe['weight'].values
 test_model(x, y, alpha, diff)
-
 
 # Test 4
 # Import the dataset as a dataframe
@@ -86,39 +66,33 @@ for featureName in X.columns:
     x = X[featureName].values
     test_model(x, y.values, alpha=0.01, diff=0.001)
 
-
+# Test 5
 # Testing the total loss function
 x = [1, 2, 3]
 y = [5, 1, 3]
-
 # y = x
 m1 = 1
 b1 = 0
-
 # y = 0.5x + 1
 m2 = 0.5
 b2 = 1
-
 total_loss1 = MyLinearRegression.total_loss(x, y, m1, b1)
 total_loss2 = MyLinearRegression.total_loss(x, y, m2, b2)
-
 print(total_loss1, total_loss2)
 
-
-
+# Test 6
 # Test the step gradient function
 x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 y = [52, 74, 79, 95, 115, 110, 129, 126, 147, 146, 156, 184]
-
 m=0
 b=0
 model = MyLinearRegression()
 m, b = model.step_gradient(x, y, m, b, 0.01)
-
 print(m, b)
-'''
 
-'''# Got this test from: https://medium.com/analytics-vidhya/implementing-gradient-descent-for-multi-linear-regression-from-scratch-3e31c114ae12
+# Test 7
+# Tests Multiple Linear Regression
+# Got this test from: https://medium.com/analytics-vidhya/implementing-gradient-descent-for-multi-linear-regression-from-scratch-3e31c114ae12
 from sklearn.datasets import load_boston
 boston = load_boston()
 X = boston.data
@@ -127,7 +101,12 @@ from sklearn.preprocessing import StandardScaler
 sc=StandardScaler()
 X_transform=sc.fit_transform(X)
 model = MyLinearRegression()
-model.fit(X_transform, Y)
+model.fit(X_transform, Y, iter=2000)
 print("m (coefficients):\n", model.m)
 print("b (intercept/bias):\n", model.b)
-'''
+print()
+y_pred = model.predict(X_transform)
+df_pred = pd.DataFrame()
+df_pred["y_actual"] = Y
+df_pred['y_pred'] = y_pred
+print(df_pred.tail(5))
