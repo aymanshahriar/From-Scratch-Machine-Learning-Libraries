@@ -1,4 +1,3 @@
-# <pre>             📈 📊 📉 💹 </pre>
 # Linear-Regression-Library-From-Scratch 📈 📊 📉 💹 
 
 Implementing gradient descent based linear regression from scratch (that optimizes the coefficients (m1, ..., mn) and slope (b) by minimizing the total loss function using gradient descent)
