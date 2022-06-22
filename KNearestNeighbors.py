@@ -79,10 +79,11 @@ class MyKNearestClassifier:
 
 class MyKNearestRegressor:
 
-    def __init__(self, k=5):
+    def __init__(self, k=5, weighted=True):
         self.k = k
         self.X_train = None
         self.y_train = None
+        self.weighted = weighted
 
     # Get distance between two n-dimensional points
     # (assume they are 1d arrays only containing the features, not target)
@@ -137,12 +138,23 @@ class MyKNearestRegressor:
         distances.sort()
         neighbors = distances[0:self.k]
 
+        if self.weighted:
+            numerator = 0
+            denominator = 0
+            for neighbor in neighbors:
+                distance = neighbor[0]
+                target = neighbor[1]
+                numerator += target/distance
+                denominator += 1/distance
+            weighted_mean = numerator/denominator
+            return weighted_mean
+        else:
         # Now get the average of the neighbor's targets, that will be our predicted target for the unlabelled datapoint
-        sum_neighbor_targets = 0
-        for neighbor in neighbors:
-            sum_neighbor_targets += neighbor[1]
-        mean_neighbor_targets = sum_neighbor_targets / k
-        return mean_neighbor_targets
+            sum_neighbor_targets = 0
+            for neighbor in neighbors:
+                sum_neighbor_targets += neighbor[1]
+            mean_neighbor_targets = sum_neighbor_targets / self.k
+            return mean_neighbor_targets
 
     def predict(self, X_test):
         y_pred = []
