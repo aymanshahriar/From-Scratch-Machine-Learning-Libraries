@@ -3,7 +3,7 @@ from random import randint
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
-from KNearestNeighbors import MyKNearestClassifier
+from KNearestNeighbors import MyKNeighborsClassifier
 
 # 1) Generate 2d matrix
 rand_arr = [[randint(0, 100) for j in range(5)] for i in range(5)]
@@ -13,7 +13,7 @@ scaler = MinMaxScaler()
 scaler.fit(rand_arr)
 normalized_arr1 = scaler.transform(rand_arr)
 
-scaler = MyKNearestClassifier()
+scaler = MyKNeighborsClassifier()
 normalized_arr2 = scaler.minmax_normalize(rand_arr)
 
 # 3) Compare the results

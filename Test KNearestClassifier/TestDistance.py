@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from KNearestNeighbors import MyKNearestClassifier
+from KNearestNeighbors import MyKNeighborsClassifier
 
 def distance(movieA, movieB):
   movieA = movieA.astype('int64')
@@ -17,6 +17,6 @@ raiders = np.array([115, 1981, 18000000])
 mean_girls = np.array([97, 2004, 17000000])
 
 
-model = MyKNearestClassifier()
+model = MyKNeighborsClassifier()
 print(distance(star_wars, raiders), model.get_distance(star_wars, raiders))
 print(distance(star_wars, mean_girls), model.get_distance(star_wars, mean_girls))

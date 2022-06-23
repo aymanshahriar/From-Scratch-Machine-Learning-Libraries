@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from KNearestNeighbors import MyKNearestRegressor
+from KNearestNeighbors import MyKNeighborsRegressor
 
 ########################################################################################################################
 '''def predict_single_datapoint(unknown, dataset, movie_ratings, k):
@@ -80,15 +80,13 @@ for title, target in zip(dataframe['title'], y_train):
 
 y_pred_codecademy = predict(X_dict_test, X_dict_train, y_dict_train, 3)
 
-model = MyKNearestRegressor(k=3, weighted=True)
+model = MyKNeighborsRegressor(k=3, weighted=True)
 model.fit(X_train, y_train)
 y_pred_me = model.predict(X_test)
 
 for a in y_pred_me:
   print(a)
 
-
-#TODO: Work on matching the weightes average results of mine with that of codecademy (whose code is in weighted regression chapter)
 
 #for a, b in zip(y_pred_me, y_pred_codecademy):
 #  print(a, b)

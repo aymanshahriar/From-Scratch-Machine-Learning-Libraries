@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from KNearestNeighbors import MyKNearestClassifier
+from KNearestNeighbors import MyKNeighborsClassifier
 
 ############################################################################################################
 def distance(movie1, movie2):
@@ -58,7 +58,7 @@ for unknown_datapoint in X_test:
 
 ##################################################################
 
-model = MyKNearestClassifier(k=3)
+model = MyKNeighborsClassifier(k=3)
 model.fit(X_train, y_train)
 
 y_pred_me = []
