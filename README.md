@@ -1,4 +1,4 @@
-# KNearest-Neighbors-Library-From-Scratch
+# KNearest-Neighbors-Library-From-Scratch 🕃
 
 Implementing K-Nearest Neighbor based regression and classification algorithms from scratch.
 
