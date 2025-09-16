@@ -1,6 +1,6 @@
 # From-Scratch Machine Learning Libraries
 
-This repository contains machine learning algorithms implemented from scratch using "pure" python, no external ML libraries are used. The code is intended to be readable and educational—clarity is prioritized over performance or brevity.
+This repository contains machine learning algorithms implemented from scratch using "pure" python, no external ML libraries are used. The code is intended to be readable and educational, so clarity is prioritized over performance or brevity.
 
 ## Components
 
